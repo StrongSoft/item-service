@@ -1,9 +1,7 @@
 package hello.itemservice.domain.item;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -13,7 +11,9 @@ public class ItemRepository {
     private static long sequence = 0L;
 
     public Item save(Item item){
-        item.setId(++sequence);
+        if(Objects.isNull(item.getId())){
+            item.setId(++sequence);
+        }
         store.put(item.getId(), item);
         return item;
     }
