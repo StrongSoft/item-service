@@ -1,7 +1,10 @@
 package hello.itemservice.web.form;
 
+import hello.itemservice.domain.item.DeliveryCode;
 import hello.itemservice.domain.item.Item;
 import hello.itemservice.domain.item.ItemRepository;
+import hello.itemservice.domain.item.ItemType;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +36,20 @@ public class FormItemController {
         regions.put("BUSAN", "부산");
         regions.put("JEJU", "제주");
         return regions;
+    }
+
+    @ModelAttribute("itemTypes")
+    public ItemType[] itemTypes() {
+        return ItemType.values();
+    }
+
+    @ModelAttribute("deliveryCodes")
+    public List<DeliveryCode> deliveryCodes(){
+        List<DeliveryCode> deliveryCodes = new ArrayList<>();
+        deliveryCodes.add(new DeliveryCode("FAST", "빠른 배송"));
+        deliveryCodes.add(new DeliveryCode("NORMAL", "일반 배송"));
+        deliveryCodes.add(new DeliveryCode("SLOW", "느린 배송"));
+        return deliveryCodes;
     }
 
     @GetMapping
@@ -98,7 +115,9 @@ public class FormItemController {
 
     @PostMapping("/add")
     public String addItemV6(Item item, RedirectAttributes redirectAttributes) {
-        log.info("add.item={}", item);
+        log.info("item.open={}", item.getOpen());
+        log.info("item.regions={}", item.getRegions());
+        log.info("item.itemType={}", item.getItemType());
         Item saveItem = itemRepository.save(item);
         redirectAttributes.addAttribute("itemId", saveItem.getId());
         redirectAttributes.addAttribute("status", true);
